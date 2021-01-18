@@ -32,3 +32,16 @@ For the sake of simplicity: Let start by seeding 3 users
 - James Harden as an employee
 
 Let see how it goes
+
+## Note to self
+
+Here is something I learned
+
+### Auto-reloading dev workflow
+
+In order to auto reload
+- Add devtools dependency to gradle
+- Run `gradle build --continuous` in one tab
+- Run `gradle bootRun` in another tab
+
+[Source](https://dzone.com/articles/continuous-auto-restart-with-spring-boot-devtools)
