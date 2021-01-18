@@ -11,7 +11,7 @@ import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 @DataJpaTest
-class RepositoriesTests @Autowired constructor(val purchaseRequestRepository: PurchaseRequestRepository) {
+class PurchaseRequestRepositoryTest @Autowired constructor(val purchaseRequestRepository: PurchaseRequestRepository) {
     @Test
     fun `When findByIdOrNull then return Purchase request`() {
         val myPr = PurchaseRequest(reason = "haha")
