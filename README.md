@@ -33,6 +33,18 @@ For the sake of simplicity: Let start by seeding 3 users
 
 Let see how it goes
 
+## Design Decision
+
+### Should we allow entity creation to happen at the edge (Controller Layer, for example)?
+
+When user create a purchase request, they must send some data to the Web API. Question: Should API level have ability to create a PurchaseRequest entity itself?
+
+There are two ways to handle this.
+- We can set a rule where communication between API layer and Domain layer must be done via an arbitrary data class. The benefit is that now API layer don't have to understand what underlying entity is. It will be simply a data interface. We decouple the API layer and domain layer. The downside: Extra overhead for any entity change. eg. simply adding field in PurchaseRequest require us to change both entity and data classes,  
+- We can allow API layer to initiate an entity, and send it to domain layer as an input. It will be easier to add, rename, modify entity. But now we coupled the API and domain. So any domain logic change can unintentionally possibly affect API layer. 
+
+Interesting decision to make. For this project, I will go with the first route. I believe the first route conform more to the spirit of hexagonal architecture. (And also possible reason why the traditional Rails-style can be more productive for starting new project)
+
 ## Note to self
 
 Here is something I learned
