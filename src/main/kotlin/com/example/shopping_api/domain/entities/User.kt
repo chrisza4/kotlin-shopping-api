@@ -1,4 +1,4 @@
-package com.example.shopping_api.domain
+package com.example.shopping_api.domain.entities
 
 import javax.persistence.*
 
