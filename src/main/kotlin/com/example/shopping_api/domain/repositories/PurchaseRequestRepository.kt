@@ -9,6 +9,6 @@ import java.util.*
 
 interface PurchaseRequestRepository : CrudRepository<PurchaseRequest, Long?> {
     fun findByOwner(owner: User): Set<PurchaseRequest>
-//    fun findByOwnerAndIdOrNull(owner: User, id: Long): PurchaseRequest?
+    fun findFirstByOwnerAndId(owner: User, id: Long): PurchaseRequest?
 }
 interface PurchaseRequestItemRepository : CrudRepository<PurchaseRequestItem, UUID?> {}
