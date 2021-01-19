@@ -1,7 +1,7 @@
-package com.example.shopping_api.repositories
+package com.example.shopping_api.domain.repositories
 
-import com.example.shopping_api.domain.PurchaseRequest
-import com.example.shopping_api.domain.PurchaseRequestItem
+import com.example.shopping_api.domain.entities.PurchaseRequest
+import com.example.shopping_api.domain.entities.PurchaseRequestItem
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test

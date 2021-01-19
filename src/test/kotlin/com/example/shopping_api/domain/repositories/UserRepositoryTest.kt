@@ -1,7 +1,7 @@
-package com.example.shopping_api.repositories
+package com.example.shopping_api.domain.repositories
 
-import com.example.shopping_api.domain.Role
-import com.example.shopping_api.domain.User
+import com.example.shopping_api.domain.entities.Role
+import com.example.shopping_api.domain.entities.User
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired

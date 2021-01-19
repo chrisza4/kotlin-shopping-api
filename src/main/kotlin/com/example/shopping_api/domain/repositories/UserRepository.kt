@@ -1,4 +1,4 @@
-package com.example.shopping_api.repositories
+package com.example.shopping_api.domain.repositories
 
 import com.example.shopping_api.domain.entities.User
 import org.springframework.data.repository.CrudRepository
