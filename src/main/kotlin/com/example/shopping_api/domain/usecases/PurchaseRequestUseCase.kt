@@ -10,6 +10,9 @@ class PurchaseRequestUseCase @Autowired constructor(
         private val purchaseRequestItemRepository: PurchaseRequestItemRepository
 ) {
     fun list(user: User, start: Int, count: Int): List<PurchaseRequestInfo> {
+        if (user.role == Role.Manager) {
+            return purchaseRequestRepository.findAll().toList().map { p -> p.toInfo() }
+        }
         return purchaseRequestRepository.findByOwner(user).toList().map { p -> p.toInfo() }
     }
 

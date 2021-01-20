@@ -22,6 +22,7 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
     val subject: PurchaseRequestUseCase = PurchaseRequestUseCase(purchaseRequestRepository, purchaseRequestItemRepository)
     val employeeChris: User = User(username = "Chris", role = Role.Employee)
     val employeeJames: User = User(username = "James", role = Role.Employee)
+    val managerMark: User = User(username = "Mark", role = Role.Manager)
 
     @BeforeEach
     fun setup() {
@@ -65,6 +66,20 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
 
         assertThat(prsJamesSee.size).isEqualTo(1)
         assertThat(prsJamesSee[0].reason).isEqualTo("New Headphones")
+    }
+
+    @Test
+    fun `The manager should see every purchase requests`() {
+        subject.create(employeeChris, CreatePurchaseInfo("New Laptops"), listOf(
+                PurchaseRequestItemInfo(null, "MacBook", 80000),
+                PurchaseRequestItemInfo(null, "Lenovo IdeaGame", 30000)
+        ))
+        subject.create(employeeJames, CreatePurchaseInfo("New Headphones"), listOf(
+                PurchaseRequestItemInfo(null, "Sony", 3000),
+        ))
+
+        val prsMarkSee = subject.list(managerMark, 0, 10)
+        assertThat(prsMarkSee.size).isEqualTo(2)
     }
 
     @Test
