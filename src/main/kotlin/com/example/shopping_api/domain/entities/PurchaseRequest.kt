@@ -19,22 +19,20 @@ class PurchaseRequest(
 
     companion object {
         fun create(info: CreatePurchaseInfo): PurchaseRequest {
-            // This can be optimized
-            val result = PurchaseRequest(
+            return PurchaseRequest(
                     id = null,
                     reason = info.reason,
                     createdAt = ZonedDateTime.now(),
             )
-            return result
         }
     }
 
     fun toDetail(): PurchaseRequestDetail {
-        return PurchaseRequestDetail(id!!, reason, createdAt, items.map { item -> item.toInfo() })
+        return PurchaseRequestDetail(id!!, reason, createdAt, items.map { item -> item.toInfo() },owner?.username ?: "")
     }
 
     fun toInfo(): PurchaseRequestInfo {
-        return PurchaseRequestInfo(id!!, reason, createdAt)
+        return PurchaseRequestInfo(id!!, reason, createdAt, owner?.username ?: "")
     }
 }
 
@@ -58,17 +56,18 @@ interface BasePurchaseRequestInfo {
     val id: Long
     val reason: String
     val createdAt: ZonedDateTime
+    val owner: String
 }
 
 data class PurchaseRequestInfo(
         override val id: Long,
         override val reason: String,
-        override val createdAt: ZonedDateTime
+        override val createdAt: ZonedDateTime,
+        override val owner: String
 ) : BasePurchaseRequestInfo
 
 data class PurchaseRequestDetail(
         override val id: Long,
         override val reason: String,
         override val createdAt: ZonedDateTime,
-        val items: List<PurchaseRequestItemInfo>
-) : BasePurchaseRequestInfo
+        val items: List<PurchaseRequestItemInfo>, override val owner: String) : BasePurchaseRequestInfo

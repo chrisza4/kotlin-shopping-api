@@ -50,11 +50,11 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
 
     @Test
     fun `An employee should see only their purchase requests`() {
-        val chrisPr = subject.create(employeeChris, CreatePurchaseInfo("New Laptops"), listOf(
+        subject.create(employeeChris, CreatePurchaseInfo("New Laptops"), listOf(
                 PurchaseRequestItemInfo(null, "MacBook", 80000),
                 PurchaseRequestItemInfo(null, "Lenovo IdeaGame", 30000)
         ))
-        val jamesPr = subject.create(employeeJames, CreatePurchaseInfo("New Headphones"), listOf(
+        subject.create(employeeJames, CreatePurchaseInfo("New Headphones"), listOf(
                 PurchaseRequestItemInfo(null, "Sony", 3000),
         ))
         val prsChrisSee = subject.list(employeeChris, 0, 10)
@@ -77,10 +77,15 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
                 PurchaseRequestItemInfo(null, "Sony", 3000),
         ))
 
-        assertThat(subject.get(employeeChris, chrisPr.id)).isNotNull
-        assertThat(subject.get(employeeChris, jamesPr.id)).isNull()
+        val chrisPrGet = subject.get(employeeChris, chrisPr.id)
+        assertThat(chrisPrGet).isNotNull
+        assertThat(chrisPrGet?.owner).isEqualTo(employeeChris.username)
+
+        val jamesPrGet = subject.get(employeeJames, jamesPr.id)
+        assertThat(jamesPrGet).isNotNull
+        assertThat(jamesPrGet?.owner).isEqualTo(employeeJames.username)
 
         assertThat(subject.get(employeeJames, chrisPr.id)).isNull()
-        assertThat(subject.get(employeeJames, jamesPr.id)).isNotNull
+        assertThat(subject.get(employeeChris, jamesPr.id)).isNull()
     }
 }
