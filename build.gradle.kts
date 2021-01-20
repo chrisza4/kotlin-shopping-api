@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.4.21"
 	id("org.jetbrains.kotlin.plugin.jpa") version "1.4.21"
 	id("org.jetbrains.kotlin.plugin.allopen") version "1.4.21"
+	id("org.flywaydb.flyway") version "7.5.0"
 	id("java")
 }
 
@@ -47,6 +48,18 @@ allOpen {
 	annotation("javax.persistence.MappedSuperclass")
 }
 
+buildscript {
+	dependencies {
+		classpath("com.h2database:h2:1.4.197")
+	}
+}
+
+flyway {
+	url = "jdbc:postgresql://localhost/shopping_api"
+	user = System.getenv("POSTGRES_USER")
+	password = System.getenv("POSTGRES_PASSWORD")
+}
+
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
@@ -56,4 +69,10 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
 	useJUnitPlatform()
+}
+
+tasks.register("printUser") {
+	doLast {
+		println(System.getenv("POSTGRES_USER"))
+	}
 }
