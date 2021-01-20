@@ -16,7 +16,6 @@ class PurchaseRequest(
         @ManyToOne
         var owner: User? = null
 ) {
-
     companion object {
         fun create(info: CreatePurchaseInfo): PurchaseRequest {
             return PurchaseRequest(

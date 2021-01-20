@@ -8,6 +8,7 @@ enum class Role {
 }
 
 @Entity
+@Table(name = "users")
 class User(
     @Id @GeneratedValue
     var id: Long? = null,

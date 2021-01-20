@@ -4,7 +4,9 @@ import com.example.shopping_api.domain.entities.*
 import com.example.shopping_api.domain.repositories.PurchaseRequestItemRepository
 import com.example.shopping_api.domain.repositories.PurchaseRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
+@Component
 class PurchaseRequestUseCase @Autowired constructor(
         private val purchaseRequestRepository: PurchaseRequestRepository,
         private val purchaseRequestItemRepository: PurchaseRequestItemRepository
