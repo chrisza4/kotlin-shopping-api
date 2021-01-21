@@ -73,6 +73,10 @@ In real-life scenario, once you start to choose between option 2 and option 3, y
 
 PS. The value of this exercise is the thought process, not the implementation itself.
 
+### Authentication
+
+I will simply check for Auth token in Controller, instead of bringing whole Spring Security here.
+
 ## Note to self
 
 Here is something I learned
@@ -89,6 +93,6 @@ In order to auto reload
 
 ### What's left?
 
-- [ ] Authentication - Can use mock token
-- [ ] Approve, Reject and Negotiate - Might require new field in
+- [x] Authentication - Can use mock token
+- [x] Approve, Reject and Negotiate - Might require new field in
 - [ ] Easier way to seed the data - Nice to have
