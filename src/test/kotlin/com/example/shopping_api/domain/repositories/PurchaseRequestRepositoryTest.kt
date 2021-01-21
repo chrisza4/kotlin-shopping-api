@@ -15,7 +15,7 @@ import java.util.*
 class PurchaseRequestRepositoryTest @Autowired constructor(val purchaseRequestRepository: PurchaseRequestRepository) {
     @Test
     fun `When findByIdOrNull then return Purchase request`() {
-        val myPr = PurchaseRequest(reason = "haha", status = PurchaseRequestStatus.Open)
+        val myPr = PurchaseRequest(reason = "haha", initialStatus = PurchaseRequestStatus.Open)
         val item = PurchaseRequestItem(UUID.randomUUID(), "Another item", 2000)
         val item2 = PurchaseRequestItem(UUID.randomUUID(), "Another item", 2000)
         myPr.items.add(item)

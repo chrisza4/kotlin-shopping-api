@@ -15,7 +15,7 @@ enum class PurchaseRequestStatus {
 }
 
 @Entity
-class PurchaseRequest(
+final class PurchaseRequest(
         @Id @GeneratedValue
         var id: Long? = null,
         var reason: String,
@@ -24,12 +24,22 @@ class PurchaseRequest(
         var items: MutableList<PurchaseRequestItem> = ArrayList(),
         @ManyToOne
         var owner: User? = null,
-        @ManyToOne
-        @ReadOnlyProperty var approver: User? = null,
-        @ReadOnlyProperty var approvedAt: ZonedDateTime? = null,
-        @Enumerated(EnumType.STRING)
-        @ReadOnlyProperty var status: PurchaseRequestStatus
+        initialStatus: PurchaseRequestStatus = PurchaseRequestStatus.Open
 ) {
+    @ManyToOne
+    var approver: User? = null
+        private set
+
+    var approvedAt: ZonedDateTime? = null
+        private set
+    @Enumerated(EnumType.STRING)
+    var status: PurchaseRequestStatus = PurchaseRequestStatus.Open
+        private set
+
+    init {
+        status = initialStatus
+    }
+
     private fun canUserApprove(approver: User): Boolean {
         return approver.role == Role.Manager
     }
@@ -40,28 +50,47 @@ class PurchaseRequest(
                     id = null,
                     reason = info.reason,
                     createdAt = ZonedDateTime.now(),
-                    status = PurchaseRequestStatus.Open
+                    initialStatus = PurchaseRequestStatus.Open
             )
         }
     }
 
+    private fun assertApproveAble(approver: User) {
+        when (true) {
+            this.status == PurchaseRequestStatus.Approved -> throw NotSupportedException("PR already approved")
+            !canUserApprove(approver) -> throw NotSupportedException("User does not have a permission")
+        }
+    }
+
     fun toDetail(): PurchaseRequestDetail {
-        return PurchaseRequestDetail(id!!, reason, createdAt, items.map { item -> item.toInfo() },owner?.username ?: "")
+        return PurchaseRequestDetail(id!!, reason, createdAt, items.map { item -> item.toInfo() }, owner?.username
+                ?: "", status)
     }
 
     fun toInfo(): PurchaseRequestInfo {
-        return PurchaseRequestInfo(id!!, reason, createdAt, owner?.username ?: "")
+        return PurchaseRequestInfo(id!!, reason, createdAt, owner?.username ?: "", status)
     }
 
     fun approve(approver: User, approvedAt: ZonedDateTime = ZonedDateTime.now()) {
-        when (true) {
-            this.status == PurchaseRequestStatus.Approved -> throw NotSupportedException("PR already approved")
-            !canUserApprove(approver) -> throw NotSupportedException("User does not have a permission to approve")
-        }
+        assertApproveAble(approver)
 
         this.approver = approver
         this.approvedAt = approvedAt
         this.status = PurchaseRequestStatus.Approved
+    }
+
+    fun reject(approver: User) {
+        assertApproveAble(approver)
+
+        this.approver = approver
+        this.status = PurchaseRequestStatus.Rejected
+    }
+
+    fun negotiate(approver: User) {
+        assertApproveAble(approver)
+
+        this.approver = approver
+        this.status = PurchaseRequestStatus.Negotiated
     }
 }
 
@@ -86,17 +115,22 @@ interface BasePurchaseRequestInfo {
     val reason: String
     val createdAt: ZonedDateTime
     val owner: String
+    val status: PurchaseRequestStatus
 }
 
 data class PurchaseRequestInfo(
         override val id: Long,
         override val reason: String,
         override val createdAt: ZonedDateTime,
-        override val owner: String
+        override val owner: String,
+        override val status: PurchaseRequestStatus
 ) : BasePurchaseRequestInfo
 
 data class PurchaseRequestDetail(
         override val id: Long,
         override val reason: String,
         override val createdAt: ZonedDateTime,
-        val items: List<PurchaseRequestItemInfo>, override val owner: String) : BasePurchaseRequestInfo
+        val items: List<PurchaseRequestItemInfo>,
+        override val owner: String,
+        override val status: PurchaseRequestStatus
+): BasePurchaseRequestInfo

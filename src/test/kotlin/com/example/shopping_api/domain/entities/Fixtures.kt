@@ -15,16 +15,19 @@ object Fixtures {
                 reason = "New Laptop",
                 createdAt = ZonedDateTime.now(),
                 owner = Users.employeeChris(),
-                status = PurchaseRequestStatus.Open
+                initialStatus = PurchaseRequestStatus.Open
         )
-        fun approvedPr() = PurchaseRequest(
-                id = null,
-                reason = "New Laptop",
-                createdAt = ZonedDateTime.now(),
-                owner = Users.employeeChris(),
-                status = PurchaseRequestStatus.Approved,
-                approvedAt = ZonedDateTime.now(),
-                approver = Users.managerMark()
-        )
+
+        fun approvedPr(): PurchaseRequest {
+            val p = PurchaseRequest(
+                    id = null,
+                    reason = "New Laptop",
+                    createdAt = ZonedDateTime.now(),
+                    owner = Users.employeeChris(),
+                    initialStatus = PurchaseRequestStatus.Open
+            )
+            p.approve(Users.managerMark(), ZonedDateTime.now())
+            return p
+        }
     }
 }

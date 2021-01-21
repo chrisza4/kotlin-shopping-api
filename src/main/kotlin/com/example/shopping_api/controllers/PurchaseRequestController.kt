@@ -30,4 +30,22 @@ class PurchaseRequestController @Autowired constructor(val purchaseRequestUseCas
         val chris = hackTools.getChris()
         return purchaseRequestUseCase.get(chris, id)
     }
+
+    @PostMapping("/purchase_request/{id}/approve")
+    fun approve(@PathVariable id: Long): PurchaseRequestDetail {
+        val mark = hackTools.getMark()
+        return purchaseRequestUseCase.approve(mark, id)
+    }
+
+    @PostMapping("/purchase_request/{id}/reject")
+    fun reject(@PathVariable id: Long): PurchaseRequestDetail {
+        val mark = hackTools.getMark()
+        return purchaseRequestUseCase.reject(mark, id)
+    }
+
+    @PostMapping("/purchase_request/{id}/negotiate")
+    fun negotiate(@PathVariable id: Long): PurchaseRequestDetail {
+        val mark = hackTools.getMark()
+        return purchaseRequestUseCase.negotiate(mark, id)
+    }
 }

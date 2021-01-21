@@ -5,6 +5,7 @@ import com.example.shopping_api.domain.repositories.PurchaseRequestItemRepositor
 import com.example.shopping_api.domain.repositories.PurchaseRequestRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+import java.time.ZonedDateTime
 
 @Component
 class PurchaseRequestUseCase @Autowired constructor(
@@ -32,15 +33,24 @@ class PurchaseRequestUseCase @Autowired constructor(
         return result.toDetail()
     }
 
-//    fun approve(user: User, purchaseRequestId: Long) {
-//        throw NotImplementedError()
-//    }
-//
-//    fun reject(user: User, purchaseRequestId: Long) {
-//        throw NotImplementedError()
-//    }
-//
-//    fun negotiate(user: User, purchaseRequestId: Long) {
-//        throw NotImplementedError()
-//    }
+    fun approve(user: User, purchaseRequestId: Long): PurchaseRequestDetail {
+        val pr = purchaseRequestRepository.findById(purchaseRequestId).get()
+        pr.approve(user, ZonedDateTime.now())
+        purchaseRequestRepository.save(pr)
+        return pr.toDetail()
+    }
+
+    fun reject(user: User, purchaseRequestId: Long): PurchaseRequestDetail {
+        val pr = purchaseRequestRepository.findById(purchaseRequestId).get()
+        pr.reject(user)
+        purchaseRequestRepository.save(pr)
+        return pr.toDetail()
+    }
+
+    fun negotiate(user: User, purchaseRequestId: Long): PurchaseRequestDetail {
+        val pr = purchaseRequestRepository.findById(purchaseRequestId).get()
+        pr.negotiate(user)
+        purchaseRequestRepository.save(pr)
+        return pr.toDetail()
+    }
 }

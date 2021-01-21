@@ -25,6 +25,7 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
     fun setup() {
         entityManager.persist(employeeChris)
         entityManager.persist(employeeJames)
+        entityManager.persist(managerMark)
         entityManager.flush()
     }
 
@@ -99,5 +100,38 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
 
         assertThat(subject.get(employeeJames, chrisPr.id)).isNull()
         assertThat(subject.get(employeeChris, jamesPr.id)).isNull()
+    }
+
+    @Test
+    fun `Can approve created PR`() {
+        val chrisPr = subject.create(employeeChris, CreatePurchaseInfo("New Laptops"), listOf(
+                PurchaseRequestItemInfo(null, "MacBook", 80000),
+                PurchaseRequestItemInfo(null, "Lenovo IdeaGame", 30000)
+        ))
+
+        val result = subject.approve(managerMark, chrisPr.id)
+        assertThat(result.status).isEqualTo(PurchaseRequestStatus.Approved)
+    }
+
+    @Test
+    fun `Can reject created PR`() {
+        val chrisPr = subject.create(employeeChris, CreatePurchaseInfo("New Laptops"), listOf(
+                PurchaseRequestItemInfo(null, "MacBook", 80000),
+                PurchaseRequestItemInfo(null, "Lenovo IdeaGame", 30000)
+        ))
+
+        val result = subject.reject(managerMark, chrisPr.id)
+        assertThat(result.status).isEqualTo(PurchaseRequestStatus.Rejected)
+    }
+
+    @Test
+    fun `Can negotiate created PR`() {
+        val chrisPr = subject.create(employeeChris, CreatePurchaseInfo("New Laptops"), listOf(
+                PurchaseRequestItemInfo(null, "MacBook", 80000),
+                PurchaseRequestItemInfo(null, "Lenovo IdeaGame", 30000)
+        ))
+
+        val result = subject.negotiate(managerMark, chrisPr.id)
+        assertThat(result.status).isEqualTo(PurchaseRequestStatus.Negotiated)
     }
 }

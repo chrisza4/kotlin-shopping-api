@@ -40,4 +40,66 @@ class PurchaseRequestTest {
             pr.approve(employee, approvedAt)
         }
     }
+
+    @Test
+    fun `Can reject PR`() {
+        val manager = Fixtures.Users.managerMark()
+        val pr = Fixtures.PurchaseRequests.simplePr()
+
+        pr.reject(manager)
+
+        assertThat(pr.approver?.username).isEqualTo(manager.username)
+        assertThat(pr.status).isEqualTo(PurchaseRequestStatus.Rejected)
+    }
+
+    @Test
+    fun `Already approved PR cannot be reject`() {
+        val manager = Fixtures.Users.managerMark()
+        val pr = Fixtures.PurchaseRequests.approvedPr()
+
+        assertThrows<NotSupportedException> {
+            pr.reject(manager)
+        }
+    }
+
+    @Test
+    fun `Employee cannot reject PR reject`() {
+        val employee = Fixtures.Users.employeeChris()
+        val pr = Fixtures.PurchaseRequests.simplePr()
+
+        assertThrows<NotSupportedException> {
+            pr.reject(employee)
+        }
+    }
+
+    @Test
+    fun `Can negotiate PR`() {
+        val manager = Fixtures.Users.managerMark()
+        val pr = Fixtures.PurchaseRequests.simplePr()
+
+        pr.negotiate(manager)
+
+        assertThat(pr.approver?.username).isEqualTo(manager.username)
+        assertThat(pr.status).isEqualTo(PurchaseRequestStatus.Negotiated)
+    }
+
+    @Test
+    fun `Already approved PR cannot be negotiate`() {
+        val manager = Fixtures.Users.managerMark()
+        val pr = Fixtures.PurchaseRequests.approvedPr()
+
+        assertThrows<NotSupportedException> {
+            pr.negotiate(manager)
+        }
+    }
+
+    @Test
+    fun `Employee cannot negotiate PR`() {
+        val employee = Fixtures.Users.employeeChris()
+        val pr = Fixtures.PurchaseRequests.simplePr()
+
+        assertThrows<NotSupportedException> {
+            pr.negotiate(employee)
+        }
+    }
 }

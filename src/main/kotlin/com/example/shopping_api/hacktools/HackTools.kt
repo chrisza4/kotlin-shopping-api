@@ -10,4 +10,8 @@ class HackTools @Autowired constructor(val userRepository: UserRepository)  {
     fun getChris(): User {
         return userRepository.findFirstByUsername("Chris")
     }
+
+    fun getMark(): User {
+        return userRepository.findFirstByUsername("Mark")
+    }
 }
