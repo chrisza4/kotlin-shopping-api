@@ -113,7 +113,7 @@ PS. This exercise's value is the thought process, not the implementation itself.
 
 ### Authentication
 
-I will simply check for Auth token in Controller instead of bringing the whole Spring Security here.
+Use Spring Security in the most basic level.
 
 ## Note to self
 
@@ -129,8 +129,8 @@ In order to auto reload
 
 [Source](https://dzone.com/articles/continuous-auto-restart-with-spring-boot-devtools)
 
-### What's left?
+### Some comments I want to make in a future
 
-- [x] Authentication - Can use mock token
-- [x] Approve, Reject and Negotiate - Might require new field in
-- [ ] Easier way to seed the data - Nice to have
+- Rails style vs Hexagonal style
+- The actual value of Hexagonal
+- All design decisions I made
