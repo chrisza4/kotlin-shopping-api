@@ -101,7 +101,7 @@ Three of them seems to all be valid, so let see what are we saying when we put i
 
 - If I create a `User.CanApprove()` method, then I basically say to everyone that every domain should use this shared approve logic. To pain a concrete picture, this design is valid if the logic of approval is valid for both PurchaseRequest system and future Budgeting system. I incentivize every contributor to not reinventing any approval rights validating logic.
 - If I put the `if` inside `PurchaseRequestEntity`, then I basically say that I reject any possibility of having approver as a non-manager of any kind.
-- If I put the `if` inside `PurchaseRequestUseCase`, then I basically say that maybe in another set of use cases, it is acceptable to have a non-manager approver.
+- If I put the `if` inside `PurchaseRequestUseCase`, then I basically say that maybe in another set of use cases, it is acceptable to have a non-manager approver, maybe in another domain (eg. Auto-Approval from Some kind of smart engine AI use-case).
 
 The first one seems to be invalid and premature. The second and third one seems to be equally valid, given that this is just a toy project.
 
