@@ -1,4 +1,4 @@
-# Shopping API
+# Purchase Request API
 
 This is a toy API for a simple purchasing system.
 
@@ -33,6 +33,42 @@ For the sake of simplicity: Let start by seeding 3 users
 - James Harden as an employee
 
 Let see how it goes
+
+## Hexagonal Architecture in Nutshell
+
+![](./doc/HexagonalBasic.png)
+
+I believe the spririt of [Hexagonal arcitecture](<https://en.wikipedia.org/wiki/Hexagonal_architecture_(software)>) is an ability to create a core engine that is very independent to 3rd-party.
+
+Quotes from Wikipedia:
+
+> _The hexagonal architecture, or ports and adapters architecture, is an architectural pattern used in software design. It aims at creating loosely coupled application components that can be easily connected to their software environment by means of ports and adapters. This makes components exchangeable at any level and facilitates test automation._
+
+### Input/Output Adapters
+
+#### Controller
+
+Controller is a layer where we connect the domain layer to the Web API. It handle the details of how to create a Web Server, JSON response, Input validation, Rate limiting (not applicable to this specific apps).
+
+Whenever Controller need to query or do anything in the business domain, it will use `useCases` objects and methods, instead of knowing how to do or query itself.
+
+Luckily, most of these details are handled in Spring Boot, so I was left to just write a minimal code.
+
+### Repository
+
+Repository is a layer where we connect the domain layer to a data source. The Repository knows how to communicate with Database, ideally in a reliable and performant way. Any detail about using data source, from how to create a simple query to how to rotating connection in connections pool. Repository knows.
+
+Again, Spring JPA handle most of these stuff for us.
+
+### Domain
+
+### Entities
+
+Entities is a data and operation inside our domain. In our case, User and Purchase Request. In DDD, entitiy is any business information that have a lifecycle, and the equality is identified by identity value rather than the content itself. For example: DateTime is not an entity because 2020-01-01 will never be as same as 2020-01-02, while PurchaseRequest#3 will always be the same PurchaseRequest#3 even if it is open, approved or reject. The business domain still perceived it as the same PurchaseRequest, even though content inside can be vary depends on time.
+
+### Use case
+
+UseCase is a set of operation allow inside the business domain. It responsible for connecting required adapters (Repository, Controller) with possibly multiple entities to achieve a business value. It can know some logic regarding of that specific business operation.
 
 ## Design Decision
 
