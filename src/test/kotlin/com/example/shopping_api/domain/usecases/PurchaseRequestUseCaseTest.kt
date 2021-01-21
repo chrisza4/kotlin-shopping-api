@@ -1,9 +1,6 @@
 package com.example.shopping_api.domain.usecases
 
-import com.example.shopping_api.domain.entities.CreatePurchaseInfo
-import com.example.shopping_api.domain.entities.PurchaseRequestItemInfo
-import com.example.shopping_api.domain.entities.Role
-import com.example.shopping_api.domain.entities.User
+import com.example.shopping_api.domain.entities.*
 import com.example.shopping_api.domain.repositories.PurchaseRequestItemRepository
 import com.example.shopping_api.domain.repositories.PurchaseRequestRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -20,9 +17,9 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
         purchaseRequestItemRepository: PurchaseRequestItemRepository) {
 
     val subject: PurchaseRequestUseCase = PurchaseRequestUseCase(purchaseRequestRepository, purchaseRequestItemRepository)
-    val employeeChris: User = User(username = "Chris", role = Role.Employee)
-    val employeeJames: User = User(username = "James", role = Role.Employee)
-    val managerMark: User = User(username = "Mark", role = Role.Manager)
+    val employeeChris = Fixtures.employeeChris()
+    val employeeJames = Fixtures.employeeJames()
+    val managerMark = Fixtures.managerMark()
 
     @BeforeEach
     fun setup() {
