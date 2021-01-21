@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager
 import org.springframework.data.repository.findByIdOrNull
 
 @DataJpaTest
-class UserRepositoryTest @Autowired constructor(val userRepository: UserRepository, val entityManager: TestEntityManager) {
+class UsersRepositoryTest @Autowired constructor(val userRepository: UserRepository, val entityManager: TestEntityManager) {
     @Test
     fun `When findByIdOrNull then return a User`() {
         val chris = User(username = "Chris", role = Role.Employee)

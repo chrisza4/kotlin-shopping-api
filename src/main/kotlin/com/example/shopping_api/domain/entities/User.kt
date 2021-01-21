@@ -16,4 +16,5 @@ class User(
     @Enumerated(EnumType.STRING)
     var role: Role,
 ) {
+
 }

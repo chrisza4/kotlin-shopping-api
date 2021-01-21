@@ -36,7 +36,7 @@ Let see how it goes
 
 ## Design Decision
 
-### Entity creation is not allwed in non-domain layer
+### Entity creation is not allowed in non-domain layer
 
 When user create a purchase request, they must send some data to the Web API. Question: Should API level have ability to create a PurchaseRequest entity itself?
 
@@ -47,11 +47,31 @@ There are two ways to handle this.
 
 Interesting decision to make. For this project, I will go with the first route. I believe the first route conform more to the spirit of hexagonal architecture.
 
-PS. And also possible reason why the traditional Rails-style can be more productive for starting new project. In Rails-style, you simply create a model in controller and if model and controller will change together 80% of the times, Rails will be more productive.
+PS. A possible reason why the traditional Rails-style can be more productive for starting new project. In Rails-style, you simply create a model in controller and if model and controller will change together 80% of the times, Rails will be more productive.
 
 ## Integration test in Domain Use Cases
 
 If we are assuming that Domain layer will be consumed by multiple input/output stream, which is the real spirit of hexagonal architecture, then it makes sense to do the integration test in domain layer.
+
+## Where to put logic of whether user can approved PR
+
+There are three possible places
+1. User.CanApproved(): Boolean
+2. PurchaseRequestEntity
+3. PurcahseReqeustUseCase
+
+Three of them seems to all be valid, so let see what are we saying when we put in each of these place
+- If I create a `User.CanApprove()` method, then I basically say to everyone that this logic should be shared to every domain who have access to User. EG. The logic of approval is valid for both PurchaseRequest system and, for example, Budgeting system. I incentivize every contributor to not reinventing any approval rights validating logic.
+- If I put the `if` inside `PurchaseRequestEntity`, then I basically say that I reject any possibility of having approver as a non-manager of any kind.
+- If I put the `if` inside `PurchaseRequestUseCase`, then I basically say that maybe in another set of use cases, it is acceptable to have a non-manager approver.
+
+The first one seems to be invalid and premature. The second and third one seems to be equally valid, given that this is just a toy project.
+
+I choose the second.
+
+In real-life scenario, once you start to choose between option 2 and option 3, you have a question to ask the domain expert.
+
+PS. The value of this exercise is the thought process, not the implementation itself.
 
 ## Note to self
 

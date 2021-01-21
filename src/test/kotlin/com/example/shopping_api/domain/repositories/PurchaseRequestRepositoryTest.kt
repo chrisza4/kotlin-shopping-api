@@ -2,6 +2,7 @@ package com.example.shopping_api.domain.repositories
 
 import com.example.shopping_api.domain.entities.PurchaseRequest
 import com.example.shopping_api.domain.entities.PurchaseRequestItem
+import com.example.shopping_api.domain.entities.PurchaseRequestStatus
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Test
@@ -14,7 +15,7 @@ import java.util.*
 class PurchaseRequestRepositoryTest @Autowired constructor(val purchaseRequestRepository: PurchaseRequestRepository) {
     @Test
     fun `When findByIdOrNull then return Purchase request`() {
-        val myPr = PurchaseRequest(reason = "haha")
+        val myPr = PurchaseRequest(reason = "haha", status = PurchaseRequestStatus.Open)
         val item = PurchaseRequestItem(UUID.randomUUID(), "Another item", 2000)
         val item2 = PurchaseRequestItem(UUID.randomUUID(), "Another item", 2000)
         myPr.items.add(item)

@@ -17,9 +17,9 @@ class PurchaseRequestUseCaseTest @Autowired constructor(
         purchaseRequestItemRepository: PurchaseRequestItemRepository) {
 
     val subject: PurchaseRequestUseCase = PurchaseRequestUseCase(purchaseRequestRepository, purchaseRequestItemRepository)
-    val employeeChris = Fixtures.employeeChris()
-    val employeeJames = Fixtures.employeeJames()
-    val managerMark = Fixtures.managerMark()
+    val employeeChris = Fixtures.Users.employeeChris()
+    val employeeJames = Fixtures.Users.employeeJames()
+    val managerMark = Fixtures.Users.managerMark()
 
     @BeforeEach
     fun setup() {

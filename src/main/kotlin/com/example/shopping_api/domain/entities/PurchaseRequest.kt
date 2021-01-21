@@ -1,9 +1,18 @@
 package com.example.shopping_api.domain.entities
 
+import org.springframework.data.annotation.ReadOnlyProperty
 import java.time.ZonedDateTime
 import java.util.*
 import javax.persistence.*
+import javax.transaction.NotSupportedException
 import kotlin.collections.ArrayList
+
+enum class PurchaseRequestStatus {
+    Open,
+    Approved,
+    Rejected,
+    Negotiated
+}
 
 @Entity
 class PurchaseRequest(
@@ -14,14 +23,24 @@ class PurchaseRequest(
         @OneToMany
         var items: MutableList<PurchaseRequestItem> = ArrayList(),
         @ManyToOne
-        var owner: User? = null
+        var owner: User? = null,
+        @ManyToOne
+        @ReadOnlyProperty var approver: User? = null,
+        @ReadOnlyProperty var approvedAt: ZonedDateTime? = null,
+        @Enumerated(EnumType.STRING)
+        @ReadOnlyProperty var status: PurchaseRequestStatus
 ) {
+    private fun canUserApprove(approver: User): Boolean {
+        return approver.role == Role.Manager
+    }
+
     companion object {
         fun create(info: CreatePurchaseInfo): PurchaseRequest {
             return PurchaseRequest(
                     id = null,
                     reason = info.reason,
                     createdAt = ZonedDateTime.now(),
+                    status = PurchaseRequestStatus.Open
             )
         }
     }
@@ -32,6 +51,17 @@ class PurchaseRequest(
 
     fun toInfo(): PurchaseRequestInfo {
         return PurchaseRequestInfo(id!!, reason, createdAt, owner?.username ?: "")
+    }
+
+    fun approve(approver: User, approvedAt: ZonedDateTime = ZonedDateTime.now()) {
+        when (true) {
+            this.status == PurchaseRequestStatus.Approved -> throw NotSupportedException("PR already approved")
+            !canUserApprove(approver) -> throw NotSupportedException("User does not have a permission to approve")
+        }
+
+        this.approver = approver
+        this.approvedAt = approvedAt
+        this.status = PurchaseRequestStatus.Approved
     }
 }
 
